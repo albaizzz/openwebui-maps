@@ -1,0 +1,18 @@
+{
+  "id": "find_places",
+  "name": "find_places",
+  "description": "Cari tempat via Google Places API",
+  "type": "http",
+  "config": {
+    "method": "GET",
+    "url": "http://places-service:8000/find_places",
+    "parameters": [
+      { "name": "query", "in": "query", "required": true, "type": "string" },
+      { "name": "lat", "in": "query", "required": false, "type": "number" },
+      { "name": "lng", "in": "query", "required": false, "type": "number" },
+      { "name": "radius", "in": "query", "required": false, "type": "integer" },
+      { "name": "max_results", "in": "query", "required": false, "type": "integer" }
+    ]
+  },
+  "send_result_to_model": true
+}

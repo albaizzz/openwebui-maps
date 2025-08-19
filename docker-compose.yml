@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  ollama:
+      image: ollama/ollama:latest
+      container_name: ollama
+      restart: always
+      volumes:
+        - ollama-data:/root/.ollama
+      ports:
+        - "11434:11434"
+      entrypoint: >
+        sh -c "
+          ollama serve &
+          sleep 5 &&
+          ollama pull llama3 &&
+          wait
+        "  
+  places-service:
+    build: ./places-service
+    container_name: places-service
+    ports:
+      - "8000:8000"
+    environment:
+      - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    ports:
+      - "3000:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - DEFAULT_MODEL=llama3
+    volumes:
+      - open-webui-data:/app/backend/data
+      - ./openwebui-tools:/app/backend/data/tools
+    depends_on:
+      - places-service
+
+volumes:
+  open-webui-data:
+  ollama-data:

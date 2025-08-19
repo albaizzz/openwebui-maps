@@ -1,0 +1,3 @@
+/places-service/__*
+/places-service/.env
+/places-service/venv
